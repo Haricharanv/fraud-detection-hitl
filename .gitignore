@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Raw Datasets (Downloadable via Kaggle scripts)
+data/
+
+# Heavy Pickles & Large Model Artefacts (>100MB blocked by GitHub)
+table1_lightgbm/artefacts/*.pkl
+
+# SQLite databases
+*.db
+*.sqlite3
+
+# Environment variables
+.env
+table3_integration/.env
+
+# Temporary / OS files & archives
+.DS_Store
+Thumbs.db
+*.zip
+
+# Exclude all PDFs (Presentation & Project Reports)
+*.pdf
+outputs/*.pdf
+
+# Generated heavy data files
+outputs/*.csv
+outputs/*.json
