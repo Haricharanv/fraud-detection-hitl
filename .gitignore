@@ -22,7 +22,13 @@ table3_integration/.env
 Thumbs.db
 *.zip
 
-# Exclude all PDFs (Presentation & Project Reports)
+# Local build scripts & internal guides
+build_pdfs.py
+PRESENTATION_GUIDE.md
+PROJECT_REPORT.md
+verify_screenshot.py
+
+# Exclude all PDFs
 *.pdf
 outputs/*.pdf
 
