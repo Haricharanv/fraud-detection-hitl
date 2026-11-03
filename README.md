@@ -59,31 +59,28 @@ python retrain_script.py
 
 ```
 Samsung Capstone Project/
-├── data/                              # Benchmark CSV files (gitignored)
-├── outputs/                           # Generated outputs & deliverables
-│   ├── capstone_project_report.pdf    # Full technical documentation (PDF)
-│   ├── presentation_guide.pdf         # Step-by-step presentation script & Q&A
-│   ├── lightgbm_shap_output.json      # IEEE-CIS SHAP explanations
-│   ├── fifar_shap_output.json         # FiFAR SHAP explanations
-│   ├── sichuan_shap_output.json       # Sichuan Telecom SHAP explanations
-│   ├── shap_summary.png               # Global feature importance plots
-│   └── retrain_data.csv               # Exported human-in-the-loop decisions
-├── table1_lightgbm/                   # Table 1: ML & Explainability Pipeline
-│   ├── phase1_data_engineering.py     # IEEE-CIS data preprocessor
+├── outputs/                           # Model evaluation visualizations
+│   ├── shap_summary.png               # IEEE-CIS global feature importance plot
+│   ├── shap_summary_fifar.png         # FiFAR global feature importance plot
+│   └── shap_summary_sichuan.png       # Sichuan Telecom global feature importance plot
+├── table1_lightgbm/                   # Table 1: ML & Explainability Pipelines
+│   ├── download_data.py               # Kaggle dataset fetcher
+│   ├── phase1_data_engineering.py     # IEEE-CIS chunked loader & preprocessor
 │   ├── phase2_cost_sensitive_training.py # IEEE-CIS cost-sensitive trainer
 │   ├── phase3_explainability.py       # IEEE-CIS SHAP TreeExplainer
-│   ├── train_fifar.py                 # FiFAR pipeline
-│   ├── train_sichuan.py               # Sichuan pipeline
-│   └── artefacts/                     # Serialized models (.pkl) & encoders
-├── table3_integration/                # Table 3: Production Backend & UI
+│   ├── train_fifar.py                 # FiFAR full training & SHAP pipeline
+│   ├── train_sichuan.py               # Sichuan full training & SHAP pipeline
+│   └── requirements.txt               # Table 1 dependencies
+├── table3_integration/                # Table 3: Backend, DB & Operator Console
 │   ├── database.py                    # PostgreSQL 15 async models (SQLAlchemy)
-│   ├── main.py                        # FastAPI microservice
-│   ├── streamlit_app.py               # Streamlit HITL operator console
-│   └── retrain_script.py              # Active learning export script
-├── ingest_predictions.py              # Ingests JSON predictions to PostgreSQL
-├── build_pdfs.py                      # Recompiles PDFs with KaTeX math
-├── start_integration.bat              # One-click launcher
-├── PRESENTATION_GUIDE.md              # Script markdown
-├── PROJECT_REPORT.md                  # Report markdown
-└── README.md
+│   ├── main.py                        # FastAPI microservice (8 REST endpoints)
+│   ├── streamlit_app.py               # Streamlit HITL operator dashboard
+│   ├── retrain_script.py              # Feedback extraction & retraining script
+│   ├── requirements.txt               # Table 3 dependencies
+│   └── .env.example                   # Environment configuration template
+├── ingest_predictions.py              # Multi-dataset bridge script (POST to PostgreSQL)
+├── run_table1_pipeline.bat            # Automated batch pipeline runner
+├── start_integration.bat              # One-click launcher (FastAPI + Streamlit)
+├── .gitignore                         # Build, binary & dataset exclusion rules
+└── README.md                          # Project documentation
 ```
