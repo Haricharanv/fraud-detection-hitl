@@ -28,9 +28,11 @@ PRESENTATION_GUIDE.md
 PROJECT_REPORT.md
 verify_screenshot.py
 
-# Exclude all PDFs
+# Exclude all PDFs & presentation HTML/PNG
 *.pdf
 outputs/*.pdf
+outputs/*.html
+outputs/*.png
 
 # Generated heavy data files
 outputs/*.csv

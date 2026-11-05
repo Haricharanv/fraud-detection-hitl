@@ -1,6 +1,6 @@
 """
 Database setup for the Fraud Detection HITL Integration Layer.
-Supports PostgreSQL (default via Docker/local) and SQLite backends.
+Supports PostgreSQL (default) with automatic resilient fallback to SQLite.
 """
 
 import os
@@ -10,7 +10,7 @@ from typing import AsyncGenerator
 
 from dotenv import load_dotenv
 from sqlalchemy import (Column, Integer, String, Float, DateTime,
-                        ForeignKey, JSON, Boolean)
+                        ForeignKey, JSON, Boolean, text)
 from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
                                     create_async_engine)
 from sqlalchemy.orm import DeclarativeBase, relationship
@@ -18,8 +18,9 @@ from sqlalchemy.orm import DeclarativeBase, relationship
 load_dotenv()
 logger = logging.getLogger(__name__)
 
-_DEFAULT_DB = "postgresql+asyncpg://postgres:postgres@localhost:5432/fraud_detection"
-DATABASE_URL = os.getenv("DATABASE_URL", _DEFAULT_DB)
+_PG_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/fraud_detection"
+_SQLITE_URL = "sqlite+aiosqlite:///./fraud_detection.db"
+DATABASE_URL = os.getenv("DATABASE_URL", _PG_URL)
 
 _connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
@@ -86,12 +87,27 @@ class OperatorFeedback(Base):
 
 
 async def init_db():
-    """Create all tables if they do not already exist."""
-    logger.info("Initialising database (%s) -- creating tables if needed ...",
-                DATABASE_URL.split("@")[-1] if "@" in DATABASE_URL else DATABASE_URL)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database initialisation complete.")
+    """Create all tables with resilient PostgreSQL -> SQLite auto-fallback."""
+    global engine, async_session_factory, DATABASE_URL
+
+    try:
+        async with engine.begin() as conn:
+            await conn.execute(text("SELECT 1;"))
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Connected to database: %s",
+                    DATABASE_URL.split("@")[-1] if "@" in DATABASE_URL else DATABASE_URL)
+    except Exception as exc:
+        if not DATABASE_URL.startswith("sqlite"):
+            logger.warning("PostgreSQL connection unavailable (%s). Falling back to SQLite ...", exc)
+            DATABASE_URL = _SQLITE_URL
+            engine = create_async_engine(DATABASE_URL, echo=False, future=True,
+                                         connect_args={"check_same_thread": False})
+            async_session_factory = async_sessionmaker(engine, expire_on_commit=False)
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+            logger.info("Resilient SQLite database initialised: %s", DATABASE_URL)
+        else:
+            raise exc
 
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
