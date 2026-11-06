@@ -6,3 +6,5 @@ shap>=0.42.0
 matplotlib>=3.7.0
 kaggle>=1.6.0
 tqdm>=4.65.0
+catboost
+optuna
