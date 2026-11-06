@@ -37,3 +37,6 @@ outputs/*.png
 # Generated heavy data files
 outputs/*.csv
 outputs/*.json
+
+# Local teammate contribution dumps
+Arjun contribution/
