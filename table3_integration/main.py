@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -105,6 +106,12 @@ async def on_startup():
     logger.info("Starting up -- initialising database ...")
     await init_db()
     logger.info("Server ready.")
+
+
+@app.get("/", include_in_schema=False)
+async def root():
+    """Redirect root path to interactive Swagger documentation."""
+    return RedirectResponse(url="/docs")
 
 
 # --- Ingest ---
