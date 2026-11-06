@@ -41,12 +41,16 @@ The platform has been benchmarked and ingested across three diverse industry dom
 
 Train models or run hyperparameter sweeps directly in the cloud with free GPU/RAM:
 
-1. **Launch Interactive Notebook:**  
-   Click the badge: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haricharanv/fraud-detection-hitl/blob/main/table1_lightgbm/Cost_Sensitive_LightGBM_Colab.ipynb)
-2. **Mount Google Drive & Run:**  
-   Place `train_transaction.csv` and `train_identity.csv` in your Google Drive or upload to `/content`. Run all cells to train the cost-sensitive booster and export `lightgbm_shap_output.json`.
-3. **Alternative Single-File Script:**  
-   Run [`table1_lightgbm/cost_sensitive_lightgbm_colab.py`](table1_lightgbm/cost_sensitive_lightgbm_colab.py) or [`table1_lightgbm/Fraud Detection LightGBM.py`](table1_lightgbm/Fraud%20Detection%20LightGBM.py) (Arjun's hybrid pipeline) in any Python environment.
+* **Notebook 1 — Hari's Cost-Sensitive LightGBM Pipeline:**  
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haricharanv/fraud-detection-hitl/blob/main/table1_lightgbm/Cost_Sensitive_LightGBM_Colab.ipynb)  
+  *Direct asymmetric gradient & hessian loss ($10 \times \text{FN} + 1 \times \text{FP}$) with TreeSHAP explainability across 3 benchmarks.*
+
+* **Notebook 2 — Arjun's Temporal Hybrid Pipeline (PR #1):**  
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Haricharanv/fraud-detection-hitl/blob/main/table1_lightgbm/Temporal_Hybrid_CatBoost_LightGBM_Colab.ipynb)  
+  *CatBoost + LightGBM ensembling with Optuna tuning, Platt scaling probability calibration, and empirical cost-optimal thresholding.*
+
+* **Alternative Single-File Scripts:**  
+  Run [`table1_lightgbm/cost_sensitive_lightgbm_colab.py`](table1_lightgbm/cost_sensitive_lightgbm_colab.py) or [`table1_lightgbm/Fraud Detection LightGBM.py`](table1_lightgbm/Fraud%20Detection%20LightGBM.py) in any standard terminal or Google Colab code cell.
 
 ---
 
@@ -92,9 +96,10 @@ Samsung Capstone Project/
 │   ├── shap_summary_fifar.png              # FiFAR global feature importance plot
 │   └── shap_summary_sichuan.png            # Sichuan Telecom global feature importance plot
 ├── table1_lightgbm/                        # Table 1: ML, Hybrid & Explainability Pipelines
-│   ├── Cost_Sensitive_LightGBM_Colab.ipynb # Interactive Google Colab notebook
-│   ├── cost_sensitive_lightgbm_colab.py    # Self-contained Colab/local cost-sensitive pipeline
-│   ├── Fraud Detection LightGBM.py         # Arjun's temporal CatBoost-LightGBM hybrid pipeline
+│   ├── Cost_Sensitive_LightGBM_Colab.ipynb # Hari's interactive Google Colab notebook
+│   ├── cost_sensitive_lightgbm_colab.py    # Hari's self-contained cost-sensitive pipeline
+│   ├── Temporal_Hybrid_CatBoost_LightGBM_Colab.ipynb # Arjun's interactive Google Colab notebook
+│   ├── Fraud Detection LightGBM.py         # Arjun's temporal CatBoost-LightGBM hybrid script
 │   ├── phase1_data_engineering.py          # IEEE-CIS chunked loader & preprocessor
 │   ├── phase2_cost_sensitive_training.py   # IEEE-CIS cost-sensitive trainer (g_i, h_i)
 │   ├── phase3_explainability.py            # IEEE-CIS SHAP TreeExplainer
